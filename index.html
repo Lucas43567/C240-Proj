@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Connect, Organize, and Vibe with your CCA Squad using our dedicated Chatbot.">
+    <title>CCA Connect Chatbot - Connect, Organize, and Vibe with Your CCA Squad</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom Tailwind Configuration for Accessibility -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'cca-dark-blue': '#0f172a',      // Deep blue - primary
+                        'cca-blue': '#1e3a8a',            // Rich blue
+                        'cca-light-blue': '#3b82f6',      // Bright blue
+                        'cca-lime': '#84cc16',            // Vibrant lime green
+                        'cca-purple': '#a855f7',          // Electric purple
+                        'cca-light': '#f8fafc',           // Clean white/off-white
+                    },
+                    fontSize: {
+                        'xs': ['0.75rem', '1rem'],
+                        'sm': ['0.875rem', '1.25rem'],
+                        'base': ['1rem', '1.5rem'],
+                        'lg': ['1.125rem', '1.75rem'],
+                        'xl': ['1.25rem', '1.75rem'],
+                        '2xl': ['1.5rem', '2rem'],
+                        '3xl': ['1.875rem', '2.25rem'],
+                        '4xl': ['2.25rem', '2.5rem'],
+                    },
+                    spacing: {
+                        'safe-top': 'max(1rem, env(safe-area-inset-top))',
+                        'safe-bottom': 'max(1rem, env(safe-area-inset-bottom))',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* Enhanced accessibility and smooth animations */
+        * {
+            scroll-behavior: smooth;
+        }
+        
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                scroll-behavior: auto;
+                animation: none !important;
+                transition: none !important;
+            }
+        }
+        
+        /* Focus states for keyboard navigation */
+        a:focus-visible,
+        button:focus-visible {
+            outline: 3px solid #a855f7;
+            outline-offset: 2px;
+        }
+        
+        /* Smooth gradient animation */
+        .gradient-animate {
+            background: linear-gradient(-45deg, #0f172a, #1e3a8a, #3b82f6, #a855f7);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+        }
+        
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* High contrast mode support */
+        @media (prefers-contrast: more) {
+            body {
+                font-weight: 500;
+            }
+        }
+        
+        /* Mobile-first touch targets (minimum 48x48px) */
+        button, a[role="button"] {
+            min-height: 3rem;
+            min-width: 3rem;
+        }
+        
+        /* Skip to main content link */
+        .skip-to-main {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: #a855f7;
+            color: white;
+            padding: 8px;
+            text-decoration: none;
+            z-index: 100;
+        }
+        
+        .skip-to-main:focus {
+            top: 0;
+        }
+    </style>
+</head>
+<body class="bg-cca-light text-gray-900 font-sans">
+    <!-- Accessibility: Skip to main content link -->
+    <a href="#main-content" class="skip-to-main">Skip to main content</a>
+    
+    <!-- Navigation Bar -->
+    <nav class="sticky top-0 z-50 bg-white shadow-lg border-b-4 border-cca-lime">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo/Brand -->
+                <div class="flex items-center space-x-2">
+                    <div class="w-10 h-10 bg-gradient-to-br from-cca-blue to-cca-purple rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold text-lg">CC</span>
+                    </div>
+                    <span class="text-xl font-bold text-cca-dark-blue hidden sm:inline">CCA Connect</span>
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <button 
+                    id="mobile-menu-btn" 
+                    class="md:hidden p-2 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-cca-purple"
+                    aria-label="Toggle navigation menu"
+                    aria-expanded="false"
+                    aria-controls="nav-menu">
+                    <svg class="w-6 h-6 text-cca-dark-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+                
+                <!-- Desktop Navigation Menu -->
+                <nav id="nav-menu" class="hidden md:flex space-x-8">
+                    <a href="#home" class="text-gray-700 hover:text-cca-lime font-semibold transition-colors duration-200 py-2" aria-current="page">
+                        Home
+                    </a>
+                    <a href="#squad" class="text-gray-700 hover:text-cca-lime font-semibold transition-colors duration-200 py-2">
+                        My CCA Squad
+                    </a>
+                    <a href="#chatbot" class="text-gray-700 hover:text-cca-lime font-semibold transition-colors duration-200 py-2">
+                        Chatbot
+                    </a>
+                </nav>
+            </div>
+            
+            <!-- Mobile Navigation Menu (Hidden by default) -->
+            <div id="nav-menu" class="hidden md:hidden pb-4 space-y-2">
+                <a href="#home" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-cca-lime rounded-lg transition-colors duration-200">
+                    Home
+                </a>
+                <a href="#squad" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-cca-lime rounded-lg transition-colors duration-200">
+                    My CCA Squad
+                </a>
+                <a href="#chatbot" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-cca-lime rounded-lg transition-colors duration-200">
+                    Chatbot
+                </a>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Main Content -->
+    <main id="main-content" role="main">
+        <!-- Hero Section -->
+        <section id="home" class="relative min-h-[calc(100vh-4rem)] flex items-center justify-center overflow-hidden">
+            <!-- Animated gradient background -->
+            <div class="absolute inset-0 gradient-animate opacity-80"></div>
+            
+            <!-- Decorative elements -->
+            <div class="absolute top-20 right-10 w-72 h-72 bg-cca-lime rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
+            <div class="absolute bottom-20 left-10 w-72 h-72 bg-cca-purple rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
+            
+            <!-- Content -->
+            <div class="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto py-20">
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 drop-shadow-lg">
+                    Welcome to CCA Connect
+                </h1>
+                
+                <p class="text-lg sm:text-xl lg:text-2xl text-gray-100 mb-8 drop-shadow-md max-w-2xl mx-auto leading-relaxed">
+                    Connect, Organize, and Vibe with your CCA Squad using our dedicated Chatbot
+                </p>
+                
+                <!-- CTA Buttons -->
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mt-10">
+                    <a href="#chatbot" class="bg-cca-lime text-cca-dark-blue font-bold py-3 px-8 rounded-lg hover:bg-yellow-400 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cca-lime">
+                        Start Chatting
+                    </a>
+                    <a href="#squad" class="bg-cca-purple text-white font-bold py-3 px-8 rounded-lg hover:bg-pink-600 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cca-purple">
+                        Join Your Squad
+                    </a>
+                </div>
+            </div>
+        </section>
+        
+        <!-- CCA Squad Metrics Section -->
+        <section class="py-20 bg-gray-50">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-cca-dark-blue mb-4 text-center">
+                    CCA Squad Metrics
+                </h2>
+                <p class="text-center text-gray-600 mb-12 text-lg">
+                    See the impact of our thriving CCA community
+                </p>
+                
+                <!-- Metrics Cards Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Card 1: Students Engaged -->
+                    <div class="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 p-8 text-center">
+                        <div class="mb-6 inline-flex items-center justify-center w-16 h-16 bg-cca-light-blue rounded-full">
+                            <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v4h8v-4zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"></path>
+                            </svg>
+                        </div>
+                        <p class="text-5xl sm:text-6xl font-bold text-cca-blue mb-3">
+                            1,200
+                        </p>
+                        <h3 class="text-xl sm:text-2xl font-semibold text-cca-dark-blue mb-2">
+                            Students Engaged
+                        </h3>
+                        <p class="text-gray-600 text-sm sm:text-base">
+                            Active members connected through CCA Connect
+                        </p>
+                    </div>
+                    
+                    <!-- Card 2: Sessions Held -->
+                    <div class="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 p-8 text-center">
+                        <div class="mb-6 inline-flex items-center justify-center w-16 h-16 bg-cca-purple rounded-full">
+                            <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"></path>
+                            </svg>
+                        </div>
+                        <p class="text-5xl sm:text-6xl font-bold text-cca-purple mb-3">
+                            85
+                        </p>
+                        <h3 class="text-xl sm:text-2xl font-semibold text-cca-dark-blue mb-2">
+                            Sessions Held
+                        </h3>
+                        <p class="text-gray-600 text-sm sm:text-base">
+                            Successful CCA meetings and events organized
+                        </p>
+                    </div>
+                    
+                    <!-- Card 3: Chatbot Queries -->
+                    <div class="bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-300 p-8 text-center">
+                        <div class="mb-6 inline-flex items-center justify-center w-16 h-16 bg-cca-lime rounded-full">
+                            <svg class="w-8 h-8 text-cca-dark-blue" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M2 5a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V5zm3.293 1.293a1 1 0 011.414 0L10 9.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                        <p class="text-5xl sm:text-6xl font-bold text-cca-lime mb-3">
+                            4,500
+                        </p>
+                        <h3 class="text-xl sm:text-2xl font-semibold text-cca-dark-blue mb-2">
+                            Chatbot Queries
+                        </h3>
+                        <p class="text-gray-600 text-sm sm:text-base">
+                            Questions answered and issues resolved
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- My CCA Squad Section -->
+        <section id="squad" class="py-20 bg-white">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-cca-dark-blue mb-4 text-center">
+                    My CCA Squad
+                </h2>
+                <p class="text-center text-gray-600 mb-12 text-lg">
+                    Connect with your club members and organize events effortlessly
+                </p>
+                
+                <!-- Squad Feature Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Card 1: Find Your Crew -->
+                    <a href="ccas.html" class="bg-gradient-to-br from-cca-light-blue to-cca-blue p-6 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 focus-within:ring-2 focus-within:ring-cca-lime cursor-pointer block">
+                        <div class="w-12 h-12 bg-cca-lime rounded-lg flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-cca-dark-blue" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v4h8v-4zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2">Find Your Crew</h3>
+                        <p class="text-gray-100">Discover and connect with club members who share your interests</p>
+                    </a>
+                    
+                    <!-- Card 2 -->
+                    <div class="bg-gradient-to-br from-cca-purple to-pink-500 p-6 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 focus-within:ring-2 focus-within:ring-cca-lime">
+                        <div class="w-12 h-12 bg-cca-lime rounded-lg flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-cca-dark-blue" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2">Organize Events</h3>
+                        <p class="text-gray-100">Plan and schedule CCA meetups, activities, and celebrations</p>
+                    </div>
+                    
+                    <!-- Card 3 -->
+                    <div class="bg-gradient-to-br from-cca-lime to-green-500 p-6 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 focus-within:ring-2 focus-within:ring-cca-purple">
+                        <div class="w-12 h-12 bg-cca-purple rounded-lg flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M1 3a1 1 0 011-1h16a1 1 0 011 1v1a1 1 0 01-1 1H2a1 1 0 01-1-1V3zm0 4a1 1 0 011-1h16a1 1 0 011 1v10a1 1 0 01-1 1H2a1 1 0 01-1-1V7zm0 11a1 1 0 011-1h16a1 1 0 011 1v1a1 1 0 01-1 1H2a1 1 0 01-1-1v-1z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-cca-dark-blue mb-2">Stay Updated</h3>
+                        <p class="text-gray-800">Get real-time notifications about club news and announcements</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Chatbot Section -->
+        <section id="chatbot" class="py-20 bg-gradient-to-br from-cca-dark-blue to-cca-blue">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 text-center">
+                    Your AI Chatbot Assistant
+                </h2>
+                <p class="text-center text-gray-200 mb-12 text-lg">
+                    Ask questions, get help, and vibe with your squad 24/7
+                </p>
+                
+                <!-- Chatbot Demo Card -->
+                <div class="max-w-2xl mx-auto bg-white rounded-xl shadow-2xl overflow-hidden">
+                    <!-- Chat Header -->
+                    <div class="bg-gradient-to-r from-cca-lime to-cca-purple p-6">
+                        <h3 class="text-xl font-bold text-white flex items-center">
+                            <span class="w-3 h-3 bg-lime-300 rounded-full mr-3 animate-pulse"></span>
+                            CCA Connect Bot
+                        </h3>
+                        <p class="text-gray-100 text-sm mt-1">Online and ready to chat</p>
+                    </div>
+                    
+                    <!-- Chat Messages -->
+                    <div class="p-6 space-y-4 bg-gray-50 min-h-96 flex flex-col">
+                        <!-- Bot Message -->
+                        <div class="flex gap-3">
+                            <div class="w-8 h-8 bg-cca-blue text-white rounded-full flex items-center justify-center flex-shrink-0">
+                                <span class="text-xs font-bold">AI</span>
+                            </div>
+                            <div class="bg-cca-light-blue text-white rounded-lg rounded-tl-none p-4 max-w-xs">
+                                <p class="text-sm">Hey there! 👋 I'm your CCA Connect Bot. How can I help you today?</p>
+                            </div>
+                        </div>
+                        
+                        <!-- User Message -->
+                        <div class="flex gap-3 justify-end">
+                            <div class="bg-cca-lime text-cca-dark-blue rounded-lg rounded-tr-none p-4 max-w-xs">
+                                <p class="text-sm font-semibold">When's the next meeting?</p>
+                            </div>
+                            <div class="w-8 h-8 bg-cca-lime text-cca-dark-blue rounded-full flex items-center justify-center flex-shrink-0">
+                                <span class="text-xs font-bold">U</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Bot Message -->
+                        <div class="flex gap-3">
+                            <div class="w-8 h-8 bg-cca-blue text-white rounded-full flex items-center justify-center flex-shrink-0">
+                                <span class="text-xs font-bold">AI</span>
+                            </div>
+                            <div class="bg-cca-light-blue text-white rounded-lg rounded-tl-none p-4 max-w-xs">
+                                <p class="text-sm">Your next CCA meeting is <strong>Friday at 4 PM</strong> in Room 103! 🎉</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Spacer -->
+                        <div class="flex-grow"></div>
+                        
+                        <!-- Typing Indicator -->
+                        <div class="flex gap-3">
+                            <div class="w-8 h-8 bg-cca-blue text-white rounded-full flex items-center justify-center flex-shrink-0">
+                                <span class="text-xs font-bold">AI</span>
+                            </div>
+                            <div class="bg-cca-light-blue text-white rounded-lg rounded-tl-none p-4 flex gap-2">
+                                <span class="w-2 h-2 bg-white rounded-full animate-bounce"></span>
+                                <span class="w-2 h-2 bg-white rounded-full animate-bounce delay-100"></span>
+                                <span class="w-2 h-2 bg-white rounded-full animate-bounce delay-200"></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Chat Input -->
+                    <div class="p-4 bg-white border-t border-gray-200">
+                        <div class="flex gap-3">
+                            <input 
+                                type="text" 
+                                placeholder="Ask me anything..." 
+                                class="flex-1 px-4 py-3 rounded-lg border-2 border-gray-300 focus:border-cca-lime focus:outline-none transition-colors duration-200"
+                                aria-label="Chat message input">
+                            <button 
+                                class="bg-cca-purple text-white px-6 py-3 rounded-lg hover:bg-pink-600 transition-colors duration-200 font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cca-purple"
+                                aria-label="Send message">
+                                Send
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Upcoming CCA Sessions Section -->
+        <section id="sessions" class="py-20 bg-white">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-cca-dark-blue mb-4 text-center">
+                    Upcoming CCA Sessions
+                </h2>
+                <p class="text-center text-gray-600 mb-12 text-lg">
+                    Don't miss out on exciting upcoming events and meetings
+                </p>
+                
+                <!-- Sessions Cards Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Session Card 1: Debate Club Finals -->
+                    <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border-l-4 border-cca-light-blue">
+                        <div class="p-6">
+                            <div class="flex items-center mb-4">
+                                <svg class="w-6 h-6 text-cca-light-blue mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v4h8v-4zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"></path>
+                                </svg>
+                                <h3 class="text-xl font-bold text-cca-dark-blue">Debate Club Finals</h3>
+                            </div>
+                            
+                            <div class="space-y-3 mb-6">
+                                <div class="flex items-center text-gray-700">
+                                    <svg class="w-5 h-5 text-cca-lime mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v2H4a2 2 0 00-2 2v2h16V7a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v2H7V3a1 1 0 00-1-1zm0 5H4v9a2 2 0 002 2h12a2 2 0 002-2V7h-2v2a1 1 0 11-2 0V7H8v2a1 1 0 11-2 0V7z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span class="font-semibold">December 10, 2025</span>
+                                </div>
+                                <div class="flex items-center text-gray-700">
+                                    <svg class="w-5 h-5 text-cca-purple mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v3.586L7.707 9.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V6z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span class="font-semibold">2:00 PM - 3:30 PM</span>
+                                </div>
+                            </div>
+                            
+                            <p class="text-gray-600 mb-6 text-sm">
+                                Witness intense debates and vote for your favorite speakers in this exciting championship event.
+                            </p>
+                            
+                            <button class="w-full bg-cca-light-blue text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cca-light-blue">
+                                Join Session
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Session Card 2: Robotics Workshop -->
+                    <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border-l-4 border-cca-purple">
+                        <div class="p-6">
+                            <div class="flex items-center mb-4">
+                                <svg class="w-6 h-6 text-cca-purple mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M10.5 1.5H9.25A1.25 1.25 0 008 2.75v2.5a2.5 2.5 0 005 0v-2.5A1.25 1.25 0 0011.75 1.5h-1.25zm-2.5 9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0zm6.25 0a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                                </svg>
+                                <h3 class="text-xl font-bold text-cca-dark-blue">Robotics Workshop</h3>
+                            </div>
+                            
+                            <div class="space-y-3 mb-6">
+                                <div class="flex items-center text-gray-700">
+                                    <svg class="w-5 h-5 text-cca-lime mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v2H4a2 2 0 00-2 2v2h16V7a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v2H7V3a1 1 0 00-1-1zm0 5H4v9a2 2 0 002 2h12a2 2 0 002-2V7h-2v2a1 1 0 11-2 0V7H8v2a1 1 0 11-2 0V7z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span class="font-semibold">December 12, 2025</span>
+                                </div>
+                                <div class="flex items-center text-gray-700">
+                                    <svg class="w-5 h-5 text-cca-purple mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v3.586L7.707 9.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V6z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span class="font-semibold">3:30 PM - 5:00 PM</span>
+                                </div>
+                            </div>
+                            
+                            <p class="text-gray-600 mb-6 text-sm">
+                                Learn robotics fundamentals and work on hands-on projects with experienced mentors.
+                            </p>
+                            
+                            <button class="w-full bg-cca-purple text-white font-bold py-3 px-4 rounded-lg hover:bg-pink-600 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cca-purple">
+                                Join Session
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Session Card 3: Art Exhibition Opening -->
+                    <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border-l-4 border-cca-lime">
+                        <div class="p-6">
+                            <div class="flex items-center mb-4">
+                                <svg class="w-6 h-6 text-cca-lime mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M2 6a2 2 0 012-2h12a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zm2 1v6h8V7H4zm9-1a1 1 0 110 2 1 1 0 010-2z"></path>
+                                </svg>
+                                <h3 class="text-xl font-bold text-cca-dark-blue">Art Exhibition Opening</h3>
+                            </div>
+                            
+                            <div class="space-y-3 mb-6">
+                                <div class="flex items-center text-gray-700">
+                                    <svg class="w-5 h-5 text-cca-lime mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v2H4a2 2 0 00-2 2v2h16V7a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v2H7V3a1 1 0 00-1-1zm0 5H4v9a2 2 0 002 2h12a2 2 0 002-2V7h-2v2a1 1 0 11-2 0V7H8v2a1 1 0 11-2 0V7z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span class="font-semibold">December 15, 2025</span>
+                                </div>
+                                <div class="flex items-center text-gray-700">
+                                    <svg class="w-5 h-5 text-cca-purple mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v3.586L7.707 9.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V6z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span class="font-semibold">6:00 PM - 8:00 PM</span>
+                                </div>
+                            </div>
+                            
+                            <p class="text-gray-600 mb-6 text-sm">
+                                Celebrate student creativity with artwork displays and networking with fellow artists.
+                            </p>
+                            
+                            <button class="w-full bg-cca-lime text-cca-dark-blue font-bold py-3 px-4 rounded-lg hover:bg-yellow-400 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cca-lime">
+                                Join Session
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- CCA Location Map Section -->
+        <section id="location" class="py-20 bg-gradient-to-br from-cca-dark-blue to-cca-blue">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 text-center">
+                    CCA Location Map
+                </h2>
+                <p class="text-center text-gray-200 mb-12 text-lg">
+                    Find us on the campus and never miss a session
+                </p>
+                
+                <!-- Map Container -->
+                <div class="relative w-full rounded-xl shadow-2xl overflow-hidden h-96 sm:h-[500px] lg:h-[600px]">
+                    <!-- Google Maps Iframe Placeholder -->
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.8228945308506!2d103.6831!3d1.3499!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31da190a51d334fb%3A0x293d27f63628e11!2sNational%20University%20of%20Singapore!5e0!3m2!1sen!2ssg!4v1702000000000"
+                        width="100%" 
+                        height="100%" 
+                        style="border:0; display:block;" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade"
+                        title="CCA Location on Campus">
+                    </iframe>
+                    
+                    <!-- Location Badge Overlay -->
+                    <div class="absolute top-6 left-6 z-50">
+                        <div class="bg-cca-lime text-cca-dark-blue px-6 py-3 rounded-full font-bold shadow-lg flex items-center space-x-2 animate-pulse">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span>Next Session Location</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Info Card Overlay (Bottom Right) -->
+                    <div class="absolute bottom-6 right-6 z-50">
+                        <div class="bg-white text-cca-dark-blue px-4 py-3 rounded-lg shadow-lg max-w-xs">
+                            <p class="text-sm font-semibold mb-1">📍 Current Location</p>
+                            <p class="text-xs text-gray-600">Campus Conference Hall<br/>Room 103, Building A</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Your CCA Chatbot Section -->
+        <section id="chatbot-interface" class="py-20 bg-gradient-to-br from-gray-50 to-cca-light">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-cca-dark-blue mb-4 text-center">
+                    Your CCA Chatbot
+                </h2>
+                <p class="text-center text-gray-600 mb-12 text-lg">
+                    Always available to help you navigate your CCA journey
+                </p>
+                
+                <!-- Full-Width Chatbot Card -->
+                <div class="bg-white rounded-2xl shadow-2xl overflow-hidden">
+                    <!-- Chatbot Header -->
+                    <div class="bg-gradient-to-r from-cca-light-blue via-cca-purple to-cca-lime p-8 sm:p-10">
+                        <div class="flex items-center space-x-4 mb-4">
+                            <div class="w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-md">
+                                <svg class="w-8 h-8 text-cca-blue" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M2 5a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V5z"></path>
+                                    <path d="M2 5a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V5z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl sm:text-3xl font-bold text-white mb-1">Ask the CCA Connect Agent</h3>
+                                <div class="flex items-center space-x-2">
+                                    <span class="w-3 h-3 bg-lime-300 rounded-full animate-pulse"></span>
+                                    <p class="text-gray-100 font-semibold">Online and ready to help</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Chatbot Body -->
+                    <div class="p-8 sm:p-10 bg-white">
+                        <!-- Chat Messages Container -->
+                        <div id="chat-messages" class="min-h-96 max-h-96 overflow-y-auto mb-8 space-y-4 bg-gray-50 rounded-xl p-6">
+                            <!-- Initial Agent Message -->
+                            <div class="flex gap-3">
+                                <div class="w-8 h-8 bg-cca-light-blue text-white rounded-full flex items-center justify-center flex-shrink-0 font-bold text-xs">
+                                    AI
+                                </div>
+                                <div class="bg-cca-light-blue text-white rounded-lg rounded-tl-none p-4 max-w-sm">
+                                    <p class="text-sm">👋 Hi there! I'm the CCA Connect Agent. Need help with registration, upcoming events, club information, or finding your perfect CCA match? Ask me anything!</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Quick Questions Suggestions -->
+                        <div class="mb-6 pb-6 border-b border-gray-200">
+                            <p class="text-sm font-semibold text-gray-700 mb-3">
+                                💡 Quick Questions:
+                            </p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <button class="quick-question text-left px-4 py-3 bg-gray-50 rounded-lg hover:bg-cca-light-blue hover:text-white transition-all duration-200 border border-gray-200 hover:border-cca-light-blue text-sm font-medium text-gray-700" data-question="How do I join a CCA?">
+                                    How do I join a CCA?
+                                </button>
+                                <button class="quick-question text-left px-4 py-3 bg-gray-50 rounded-lg hover:bg-cca-purple hover:text-white transition-all duration-200 border border-gray-200 hover:border-cca-purple text-sm font-medium text-gray-700" data-question="When's the next meeting?">
+                                    When's the next meeting?
+                                </button>
+                                <button class="quick-question text-left px-4 py-3 bg-gray-50 rounded-lg hover:bg-cca-lime hover:text-cca-dark-blue transition-all duration-200 border border-gray-200 hover:border-cca-lime text-sm font-medium text-gray-700" data-question="What clubs are available?">
+                                    What clubs are available?
+                                </button>
+                                <button class="quick-question text-left px-4 py-3 bg-gray-50 rounded-lg hover:bg-cca-light-blue hover:text-white transition-all duration-200 border border-gray-200 hover:border-cca-light-blue text-sm font-medium text-gray-700" data-question="How to contact organizers?">
+                                    How to contact organizers?
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Chat Input Area -->
+                        <div class="space-y-4">
+                            <label for="chat-input" class="block text-sm font-semibold text-gray-700">
+                                Your Message:
+                            </label>
+                            <div class="flex flex-col sm:flex-row gap-4">
+                                <input 
+                                    type="text" 
+                                    id="chat-input"
+                                    placeholder="Type your query..." 
+                                    class="flex-1 px-6 py-4 rounded-xl border-2 border-gray-300 bg-white text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cca-purple focus:border-transparent transition-all duration-200 text-base font-medium"
+                                    aria-label="Chat message input">
+                                <button 
+                                    id="send-btn"
+                                    class="px-8 py-4 bg-gradient-to-r from-cca-lime to-cca-purple text-white font-bold rounded-xl hover:shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cca-purple text-base whitespace-nowrap flex items-center justify-center space-x-2 cursor-pointer"
+                                    aria-label="Send message">
+                                    <span>Send</span>
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7m0 0l-7 7m7-7H6"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Footer Note -->
+                    <div class="bg-gradient-to-r from-cca-dark-blue to-cca-blue px-8 sm:px-10 py-4 text-center">
+                        <p class="text-gray-100 text-sm flex items-center justify-center space-x-2">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zm-11-1a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 11-2 0 1 1 0 012 0zm5 0a1 1 0 11-2 0 1 1 0 012 0z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span>Get instant answers from our AI-powered CCA assistant 24/7</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- CTA Section -->
+        <section class="py-16 bg-white">
+            <div class="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl sm:text-4xl font-bold text-cca-dark-blue mb-6">
+                    Ready to Connect with Your CCA Squad?
+                </h2>
+                <p class="text-gray-600 text-lg mb-8">
+                    Join thousands of students connecting, organizing, and vibing with their favorite clubs
+                </p>
+                <button 
+                    class="bg-cca-lime text-cca-dark-blue font-bold py-4 px-10 rounded-lg hover:bg-yellow-400 transition-all duration-200 shadow-lg hover:shadow-xl text-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cca-lime">
+                    Get Started Now
+                </button>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="bg-cca-dark-blue text-white py-12">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                <!-- About -->
+                <div>
+                    <h3 class="font-bold text-lg mb-3 flex items-center">
+                        <span class="w-2 h-2 bg-cca-lime rounded-full mr-2"></span>
+                        About CCA Connect
+                    </h3>
+                    <p class="text-gray-300 text-sm">Connect, organize, and vibe with your CCA squad using our AI-powered chatbot platform.</p>
+                </div>
+                
+                <!-- Quick Links -->
+                <div>
+                    <h3 class="font-bold text-lg mb-3 flex items-center">
+                        <span class="w-2 h-2 bg-cca-purple rounded-full mr-2"></span>
+                        Quick Links
+                    </h3>
+                    <ul class="space-y-2 text-gray-300 text-sm">
+                        <li><a href="#home" class="hover:text-cca-lime transition-colors">Home</a></li>
+                        <li><a href="#squad" class="hover:text-cca-lime transition-colors">My Squad</a></li>
+                        <li><a href="#chatbot" class="hover:text-cca-lime transition-colors">Chatbot</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Contact -->
+                <div>
+                    <h3 class="font-bold text-lg mb-3 flex items-center">
+                        <span class="w-2 h-2 bg-cca-lime rounded-full mr-2"></span>
+                        Connect With Us
+                    </h3>
+                    <ul class="space-y-2 text-gray-300 text-sm">
+                        <li><a href="mailto:hello@ccaconnect.com" class="hover:text-cca-lime transition-colors">Email Us</a></li>
+                        <li><a href="#" class="hover:text-cca-lime transition-colors">Instagram</a></li>
+                        <li><a href="#" class="hover:text-cca-lime transition-colors">Discord</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Divider -->
+            <div class="border-t border-gray-700 pt-8">
+                <div class="flex flex-col sm:flex-row justify-between items-center">
+                    <p class="text-gray-400 text-sm">© 2025 CCA Connect Chatbot. All rights reserved.</p>
+                    <div class="flex gap-6 mt-4 sm:mt-0 text-sm text-gray-400">
+                        <a href="#" class="hover:text-cca-lime transition-colors">Privacy Policy</a>
+                        <a href="#" class="hover:text-cca-lime transition-colors">Terms of Service</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Mobile Menu Toggle Script -->
+    <script>
+        // Mobile menu toggle with accessibility
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const navMenu = document.getElementById('nav-menu');
+        
+        if (mobileMenuBtn && navMenu) {
+            mobileMenuBtn.addEventListener('click', function() {
+                const isExpanded = this.getAttribute('aria-expanded') === 'true';
+                this.setAttribute('aria-expanded', !isExpanded);
+                navMenu.classList.toggle('hidden');
+            });
+            
+            // Close menu when a link is clicked
+            const navLinks = navMenu.querySelectorAll('a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                    navMenu.classList.add('hidden');
+                });
+            });
+        }
+        
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href !== '#') {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+            });
+        });
+        
+        // ===== Chatbot Functionality =====
+        const chatInput = document.getElementById('chat-input');
+        const sendBtn = document.getElementById('send-btn');
+        const chatMessages = document.getElementById('chat-messages');
+        const quickQuestionBtns = document.querySelectorAll('.quick-question');
+        
+        // Mock responses from the agent
+        const mockResponses = {
+            'How do I join a CCA?': '✨ Great question! To join a CCA, simply:\n1. Browse available clubs on our platform\n2. Click "Join" on the club you\'re interested in\n3. Attend the next meeting\n4. Connect with fellow members!\n\nWe have 50+ clubs available. Would you like me to recommend one based on your interests?',
+            
+            'When\'s the next meeting?': '📅 Our next CCA meeting is:\n\n🎤 Debate Club Finals - December 10, 2:00 PM\n🤖 Robotics Workshop - December 12, 3:30 PM\n🎨 Art Exhibition Opening - December 15, 6:00 PM\n\nVisit the "Upcoming Sessions" section to see all events and register!',
+            
+            'What clubs are available?': '🏆 We have amazing clubs including:\n\n💬 Debate Club\n🤖 Robotics Club\n🎨 Art & Design\n⚽ Sports & Fitness\n🎵 Music & Performance\n📚 Academic Excellence\n🎮 Gaming & Esports\n🌍 Culture & Languages\n\nAnd many more! Which interests you?',
+            
+            'How to contact organizers?': '📧 You can reach our CCA organizers:\n\n✉️ Email: hello@ccaconnect.com\n💬 Discord: Join our server\n📱 Instagram: @ccaconnect\n🕒 Office Hours: Mon-Fri, 3-5 PM in Room 103\n\nFeel free to reach out anytime with questions!',
+            
+            'default': '👋 That\'s a great question! Here\'s what I can help you with:\n\n• Joining CCAs\n• Upcoming events & meetings\n• Available clubs & activities\n• Contacting organizers\n• Event registration\n\nWould you like more info on any of these topics?'
+        };
+        
+        // Function to add message to chat
+        function addMessage(text, isUser = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `flex gap-3 ${isUser ? 'justify-end' : ''}`;
+            
+            if (isUser) {
+                messageDiv.innerHTML = `
+                    <div class="bg-cca-lime text-cca-dark-blue rounded-lg rounded-tr-none p-4 max-w-sm">
+                        <p class="text-sm">${text}</p>
+                    </div>
+                    <div class="w-8 h-8 bg-cca-lime text-cca-dark-blue rounded-full flex items-center justify-center flex-shrink-0 font-bold text-xs">
+                        U
+                    </div>
+                `;
+            } else {
+                messageDiv.innerHTML = `
+                    <div class="w-8 h-8 bg-cca-light-blue text-white rounded-full flex items-center justify-center flex-shrink-0 font-bold text-xs">
+                        AI
+                    </div>
+                    <div class="bg-cca-light-blue text-white rounded-lg rounded-tl-none p-4 max-w-sm">
+                        <p class="text-sm whitespace-pre-wrap">${text}</p>
+                    </div>
+                `;
+            }
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        // Function to show typing indicator
+        function showTypingIndicator() {
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'flex gap-3';
+            typingDiv.id = 'typing-indicator';
+            typingDiv.innerHTML = `
+                <div class="w-8 h-8 bg-cca-light-blue text-white rounded-full flex items-center justify-center flex-shrink-0 font-bold text-xs">
+                    AI
+                </div>
+                <div class="bg-cca-light-blue text-white rounded-lg rounded-tl-none p-4 flex gap-2">
+                    <span class="w-2 h-2 bg-white rounded-full animate-bounce"></span>
+                    <span class="w-2 h-2 bg-white rounded-full animate-bounce" style="animation-delay: 0.1s"></span>
+                    <span class="w-2 h-2 bg-white rounded-full animate-bounce" style="animation-delay: 0.2s"></span>
+                </div>
+            `;
+            chatMessages.appendChild(typingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        // Function to remove typing indicator
+        function removeTypingIndicator() {
+            const typing = document.getElementById('typing-indicator');
+            if (typing) {
+                typing.remove();
+            }
+        }
+        
+        // Function to send message
+        function sendMessage() {
+            const userMessage = chatInput.value.trim();
+            
+            if (!userMessage) return;
+            
+            // Add user message
+            addMessage(userMessage, true);
+            chatInput.value = '';
+            
+            // Show typing indicator
+            showTypingIndicator();
+            
+            // Simulate agent thinking (500-1500ms delay)
+            setTimeout(() => {
+                removeTypingIndicator();
+                
+                // Get response based on user input
+                let response = mockResponses['default'];
+                
+                // Check if user message matches any predefined question
+                for (const question in mockResponses) {
+                    if (question !== 'default' && userMessage.toLowerCase().includes(question.toLowerCase())) {
+                        response = mockResponses[question];
+                        break;
+                    }
+                }
+                
+                addMessage(response, false);
+            }, 800 + Math.random() * 700);
+        }
+        
+        // Send button click handler
+        sendBtn.addEventListener('click', sendMessage);
+        
+        // Enter key to send
+        chatInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+        
+        // Quick question buttons
+        quickQuestionBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const question = this.getAttribute('data-question');
+                chatInput.value = question;
+                sendMessage();
+            });
+        });
+    </script>
+</body>
+</html>
